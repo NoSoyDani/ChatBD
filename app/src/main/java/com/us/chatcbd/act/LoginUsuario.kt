@@ -18,7 +18,11 @@ class LoginUsuario : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_usuario)
         auth = FirebaseAuth.getInstance()
-
+        usuarioFireBase=FirebaseAuth.getInstance().currentUser!!
+        if(usuarioFireBase!=null){
+            startActivity(Intent(this@LoginUsuario, ChatUsuarios::class.java))
+            finish()
+        }
         val botonLoginUsuario: Button =findViewById(R.id.btnLogIn_Log)
         botonLoginUsuario.setOnClickListener{
             val email: EditText = findViewById(R.id.camEmail_login)
