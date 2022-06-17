@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Chatcbd</string>
+    <string name="campo_nombre">Introduzca un nombre de usuario</string>
+    <string name="campo_email">Introduzca un email</string>
+    <string name="campo_mensaje">Mensaje</string>
+    <string name="campo_email_login">Introduzca su email</string>
+    <string name="campo_password">Introduzca una contraseña</string>
+    <string name="campo_password_login">Introduzca su contraseña</string>
+    <string name="campo_confirm_password">Introduzca de nuevo la contraseña</string>
+    <string name="btnRegistro">Dar de Alta</string>
+    <string name="btnLogIn">Log In</string>
+</resources>

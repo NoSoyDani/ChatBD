@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "91875879304",
+    "firebase_url": "https://chatcbd-a69c0-default-rtdb.firebaseio.com",
+    "project_id": "chatcbd-a69c0",
+    "storage_bucket": "chatcbd-a69c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91875879304:android:aab4389deca12d324af23d",
+        "android_client_info": {
+          "package_name": "com.us.chatcbd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91875879304-ridp6e7ko060fb64qumrnndp0sdg6roa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiv8ZIpU7v3xxZNLN27FVRUc3rnP7Nerw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91875879304-ridp6e7ko060fb64qumrnndp0sdg6roa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
