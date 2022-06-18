@@ -34,6 +34,8 @@ class UsuarioAdp(private val context: Context,
         holder.chatUsuario.setOnClickListener {
         val intent = Intent(context, ChatActividad::class.java)
             intent.putExtra("IdUsuario", usuario.idUsuario)
+            intent.putExtra("NombreUsuario", usuario.nombreUsuario)
+
             context.startActivity(intent)
         }
     }

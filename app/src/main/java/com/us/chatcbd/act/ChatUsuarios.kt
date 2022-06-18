@@ -1,11 +1,11 @@
 package com.us.chatcbd.act
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,8 +15,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.us.chatcbd.R
 import com.us.chatcbd.adp.UsuarioAdp
+import com.us.chatcbd.firebase.FirebaseServicio
 import com.us.chatcbd.modelo.Usuario
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -26,6 +28,14 @@ class ChatUsuarios : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.listado_usuarios)
+
+
+        FirebaseServicio.preferencias = getSharedPreferences("sharedPref",Context.MODE_PRIVATE)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { result ->
+            if(result != null){
+                FirebaseServicio.token = result
+            }
+        }
 
         val vistaUsuario: RecyclerView = findViewById(R.id.usuarioRecyclerView)
         vistaUsuario.layoutManager= LinearLayoutManager(this,RecyclerView.VERTICAL,false)
@@ -45,6 +55,8 @@ class ChatUsuarios : AppCompatActivity() {
     fun getListaUsuariosFireBase(vistaUsuario: RecyclerView){
 
         val base: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
+        var usuarioId= base.uid
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/$usuarioId")
         val databaseReference = FirebaseDatabase.getInstance().getReference("Usuarios")
 
         databaseReference.addValueEventListener(object: ValueEventListener{
@@ -61,6 +73,7 @@ class ChatUsuarios : AppCompatActivity() {
                 for(dataSnapShot:DataSnapshot in snapshot.children){
                     val usuario=dataSnapShot.getValue(Usuario::class.java)
                     if(!usuario!!.idUsuario.equals(base.uid)){
+
                         listaUsuarios.add(usuario)
                     }
                 }

@@ -1,24 +1,32 @@
 package com.us.chatcbd.act
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.gson.Gson
 import com.us.chatcbd.R
+import com.us.chatcbd.RetrofitInstance
 import com.us.chatcbd.adp.ChatAdp
 import com.us.chatcbd.modelo.Chat
+import com.us.chatcbd.modelo.Notificacion
+import com.us.chatcbd.modelo.NotificacionPush
 import com.us.chatcbd.modelo.Usuario
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ChatActividad : AppCompatActivity() {
     private lateinit var usuarioFireBase: FirebaseUser
     private lateinit var databaseReference: DatabaseReference
     var listaChat = ArrayList<Chat>()
+    var topico = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat_actividad)
@@ -33,6 +41,8 @@ class ChatActividad : AppCompatActivity() {
         }
 
         var idUsuario = getIntent().getStringExtra("IdUsuario")
+        var nombreUsuario = getIntent().getStringExtra("NombreUsuario")
+
         usuarioFireBase = FirebaseAuth.getInstance().currentUser!!
         databaseReference =
             FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuario!!)
@@ -67,6 +77,8 @@ class ChatActividad : AppCompatActivity() {
             }else{
                 enviarMensaje(usuarioFireBase!!.uid,idUsuario,mensaje)
                 campoTexto.setText("")
+                topico="/topics/$idUsuario"
+                NotificacionPush(Notificacion(nombreUsuario!!,mensaje),topico).also { enviarNot(it)}
             }
         }
         getListaMensajesChatFireBase(usuarioFireBase!!.uid,idUsuario)
@@ -104,6 +116,24 @@ class ChatActividad : AppCompatActivity() {
                 Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private  fun enviarNot(notificacion:NotificacionPush) = CoroutineScope(Dispatchers.IO).launch {
+        try{
+            val respuesta = RetrofitInstance.api.postNotificacion((notificacion))
+            if(respuesta.isSuccessful){
+                Toast.makeText(this@ChatActividad, "Response ${Gson().toJson(respuesta)}",Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this@ChatActividad, respuesta.errorBody().toString(),Toast.LENGTH_SHORT).show()
+            }
+        }catch (e:Exception){
+            Toast.makeText(this@ChatActividad, e.message,Toast.LENGTH_SHORT).show()
+
+        }
+
+
+
+
     }
 }
 
